@@ -9,6 +9,7 @@ typedef enum {
   HERR_CANNOT_SEND,
   HERR_OS,
   HERR_INVALID_METHOD,
+  HERR_CANNOT_GET_TIME,
 } HttpErr;
 
 #endif

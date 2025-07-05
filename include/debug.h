@@ -4,5 +4,6 @@
 #define DEBUG_CLIENT
 #define DEBUG_CONN
 #define DEBUG_COMMUNICATION
+#define DEBUG_REQUEST
 
 #endif

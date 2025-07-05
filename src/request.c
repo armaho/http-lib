@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "debug.h"
 #include "request.h" 
 #include "string-helper.h"
+#include "date-helper.h"
 
 #define INIT_BUF_SIZE (1 << 7)
 
@@ -43,16 +45,28 @@ HttpErr serializeHttpRequest(const HttpRequest *req, char **buf, size_t *len) {
 
   strcatRealloc(buf, method, len);
   strcatRealloc(buf, " ", len);
-
   strcatRealloc(buf, req->uri, len);
   strcatRealloc(buf, " ", len);
-
   strcatRealloc(buf, "HTTP/1.0", len);
   strcatRealloc(buf, " ", len);
+  strcatRealloc(buf, "\r\n", len);
 
+#define DATE_BUF_SIZE 100
+
+  char date[DATE_BUF_SIZE];
+  if ((err = getCurrentDateStr(date, DATE_BUF_SIZE)) != HERR_NO_ERR) {
+    return err;
+  }
+  
+  strcatRealloc(buf, "Date: ", len);
+  strcatRealloc(buf, date, len);
   strcatRealloc(buf, "\r\n", len);
 
   strcatRealloc(buf, "\r\n", len);
+
+#ifdef DEBUG_REQUEST
+  printf("%s", BUF);
+#endif
 
   return HERR_NO_ERR;
 

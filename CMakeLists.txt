@@ -14,11 +14,13 @@ add_executable(http_lib
   include/request.h
   include/string-helper.h
   include/communication.h
+  include/date-helper.h
 
   src/client.c
   src/conn.c
   src/request.c
   src/string-helper.c
   src/communication.c
+  src/date-helper.c
 
   test/main.c)
