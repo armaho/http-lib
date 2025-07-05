@@ -47,9 +47,6 @@ static HttpErr recvRaw(const HttpConn *conn, char **buf, size_t *len) {
       return HERR_CANNOT_RECV;
     }
 
-#ifdef DEBUG_COMMUNICATION
-    printf("Packet Recieved. Len: %d\n", tmpBufLen);
-#endif
     tmpBuf[tmpBufLen] = '\0';
     
     strcatRealloc(buf, tmpBuf, len);
