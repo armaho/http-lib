@@ -13,10 +13,12 @@ add_executable(http_lib
   include/conn.h
   include/request.h
   include/string-helper.h
+  include/communication.h
 
   src/client.c
   src/conn.c
   src/request.c
   src/string-helper.c
+  src/communication.c
 
   test/main.c)

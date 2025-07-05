@@ -1,5 +1,5 @@
-#ifndef _http_lib_message_h_
-#define _http_lib_message_h_
+#ifndef _http_lib_request_h_
+#define _http_lib_request_h_
 
 #include <stdlib.h>
 
@@ -19,6 +19,6 @@ HttpErr initHttpRequest(HttpRequest *req,
     HttpRequestMethod method, 
     const char *uri, 
     size_t uriLen);
-HttpErr serializeHttpRequest(HttpRequest *req, char **buf, size_t *len);
+HttpErr serializeHttpRequest(const HttpRequest *req, char **buf, size_t *len);
 
 #endif

@@ -21,7 +21,7 @@ HttpErr initHttpRequest(HttpRequest *req,
   return HERR_NO_ERR;
 }
 
-HttpErr serializeHttpRequest(HttpRequest *req, char **buf, size_t *len) {
+HttpErr serializeHttpRequest(const HttpRequest *req, char **buf, size_t *len) {
 #define BUF (*buf)
 #define LEN (*len)
 
@@ -29,17 +29,13 @@ HttpErr serializeHttpRequest(HttpRequest *req, char **buf, size_t *len) {
   assert(buf != NULL);
   assert(len != NULL);
 
-  char *method;
-
-  if (BUF == NULL) {
-    LEN = INIT_BUF_SIZE;
-    BUF = (char *)malloc(INIT_BUF_SIZE * sizeof(char));
-    if (BUF == NULL) {
-      return HERR_OS;
-    }
+  HttpErr err;
+  
+  if ((err = strInitBufIfNull(buf, len, INIT_BUF_SIZE)) != HERR_NO_ERR) {
+    return err;
   }
-  BUF[0] = '\0';
 
+  char *method;
   switch (req->method) {
     case HREQ_GET: method = "GET"; break;
     default: return HERR_INVALID_METHOD;

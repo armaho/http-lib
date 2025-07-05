@@ -1,22 +1,41 @@
 #include "client.h"
+#include "communication.h"
 #include "request.h"
+#include <sysexits.h>
 #include <stdio.h>
 
 int main(int argc, char **argv) {
-  HttpRequest req;
-
-  initHttpRequest(&req, HREQ_GET, "/", 1);
-
-  char *buf = (char *)malloc(sizeof(char));
-  size_t bufCap = 1;
-
-  HttpErr err;
-
-  if ((err = serializeHttpRequest(&req, &buf, &bufCap)) != HERR_NO_ERR) {
-    printf("err %d\n", err);
-    exit(1);
+  if (argc != 3) {
+    fprintf(stderr, "usage: http-lib <hostname> <port>\n");
+    exit(EX_USAGE);
   }
 
-  printf("req: %s\n", buf);
+  HttpErr err;
+  HttpClient client;
+
+  if ((err = initHttpClient(&client, argv[1], argv[2])) != HERR_NO_ERR) {
+    printf("client err: %d", err);
+    exit(EX_SOFTWARE);
+  }
+
+  HttpRequest req;
+
+  if ((err = initHttpRequest(&req, HREQ_GET, "/", 1)) != HERR_NO_ERR) {
+    printf("init request err: %d", err);
+    exit(EX_SOFTWARE);
+  }
+
+  if ((err = sendHttpRequest(client.conn, &req)) != HERR_NO_ERR) {
+    printf("send request err: %d", err);
+    exit(EX_SOFTWARE);
+  }
+
+  if ((err = sendHttpRequest(client.conn, &req)) != HERR_NO_ERR) {
+    printf("send request err: %d", err);
+    exit(EX_SOFTWARE);
+  }
+
+  freeHttpClient(&client);
+
   return 0;
 }

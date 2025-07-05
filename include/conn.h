@@ -9,7 +9,6 @@ typedef struct {
   int sockfd;
 } HttpConn;
 
-HttpErr sendRawMessageHttpConn(const HttpConn *client, const char *message, size_t len);
 HttpErr freeHttpConn(HttpConn *conn);
 
 #endif

@@ -5,6 +5,7 @@
 
 #include "err.h"
 
+HttpErr strInitBufIfNull(char **bufPtr, size_t *bufCap, size_t desieredCap);
 HttpErr strcatRealloc(char **bufPtr, const char *app, size_t *buflen);
 
 #endif

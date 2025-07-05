@@ -3,5 +3,6 @@
 
 #define DEBUG_CLIENT
 #define DEBUG_CONN
+#define DEBUG_COMMUNICATION
 
 #endif
