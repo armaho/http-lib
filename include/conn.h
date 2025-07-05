@@ -9,6 +9,6 @@ typedef struct {
   int sockfd;
 } HttpConn;
 
-HttpErr freeHttpConn(HttpConn *conn);
+HttpErr closeHttpConn(HttpConn *conn);
 
 #endif

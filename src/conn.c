@@ -9,7 +9,7 @@
 #include "conn.h"
 #include "debug.h"
 
-HttpErr freeHttpConn(HttpConn *conn) {
+HttpErr closeHttpConn(HttpConn *conn) {
   if (close(conn->sockfd) == -1) {
     return HERR_OS;
   }

@@ -5,12 +5,14 @@
 
 #include "conn.h"
 #include "err.h"
+#include "request.h"
 
 typedef struct {
-  HttpConn *conn;
+  const char *servAddr;
+  const char *servPort;
 } HttpClient;
 
 HttpErr initHttpClient(HttpClient *client, const char *addr, const char *port);
-HttpErr freeHttpClient(HttpClient *client);
+HttpErr sendRequestHttpClient(const HttpClient *client, const HttpRequest *req);
 
 #endif

@@ -6,11 +6,10 @@
 #include <sys/types.h>
 
 #include "client.h"
+#include "communication.h"
 #include "debug.h"
 
-static const int winSize = 9;
-
-HttpErr initHttpClient(HttpClient *client, const char *addr, const char *port) {
+static HttpErr getConn(const HttpClient *client, HttpConn *conn) {
   int err;
   int sockfd;
   struct addrinfo hints;
@@ -22,7 +21,7 @@ HttpErr initHttpClient(HttpClient *client, const char *addr, const char *port) {
 
   assert(client != NULL);
 
-  if ((err = getaddrinfo(addr, port, &hints, &res)) != 0) {
+  if ((err = getaddrinfo(client->servAddr, client->servPort, &hints, &res)) != 0) {
     return HERR_GETADDRINFO;
   }
 
@@ -50,18 +49,35 @@ HttpErr initHttpClient(HttpClient *client, const char *addr, const char *port) {
 
   freeaddrinfo(res);
 
-  if ((client->conn = (HttpConn *)malloc(sizeof(HttpConn))) == NULL) {
-#ifdef DEBUG_CLIENT
-    perror("malloc");
-#endif
-    return HERR_OS;
-  }
-  client->conn->sockfd = sockfd;
-  
+  conn->sockfd = sockfd;
+
   return HERR_NO_ERR;
 }
 
-HttpErr freeHttpClient(HttpClient *client) {
-  return freeHttpConn(client->conn);
+HttpErr initHttpClient(HttpClient *client, const char *addr, const char *port) {
+  assert(client != NULL);
+
+  client->servAddr = addr;
+  client->servPort = port;
+
+  return HERR_NO_ERR;
 }
 
+HttpErr sendRequestHttpClient(const HttpClient *client, const HttpRequest *req) {
+  HttpErr err;
+  HttpConn conn;
+  
+  if ((err = getConn(client, &conn)) != HERR_NO_ERR) {
+    return err;
+  }
+
+  if ((err = sendHttpRequest(&conn, req)) != HERR_NO_ERR) {
+    return err;
+  }
+
+  if ((err = closeHttpConn(&conn)) != HERR_NO_ERR) {
+    return err;
+  }
+
+  return HERR_NO_ERR;
+}
